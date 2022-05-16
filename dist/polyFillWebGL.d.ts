@@ -1,2 +1,2 @@
-declare function _default(gl: WebGLRenderingContext): any;
+declare function _default(gl: WebGLRenderingContext): WebGLRenderingContext;
 export default _default;

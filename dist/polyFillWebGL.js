@@ -10,22 +10,23 @@
  * the convenience of some functionality or your platform does not support WebGL2
  * it can be polyfilled using extensions.
  * @param {WebGLRenderingContext} gl The context to polyfill.
- * @returns {*} WebGLRenderingContext with some WebGL2 functionality
+ * @returns {WebGLRenderingContext} WebGLRenderingContext with some WebGL2 functionality
  */
 export default (gl) => {
+    const polyFilledGL = gl;
     // Poly fill vertex array object VAO
-    const vertexArrayObjectExtension = gl.getExtension('OES_vertex_array_object');
-    gl.createVertexArray = () => vertexArrayObjectExtension.createVertexArrayOES();
-    gl.deleteVertexArray = (id) => vertexArrayObjectExtension.deleteVertexArrayOES(id);
-    gl.bindVertexArray = (id) => vertexArrayObjectExtension.bindVertexArrayOES(id);
-    gl.isVertexArray = (id) => vertexArrayObjectExtension.isVertexArrayOES(id);
-    gl.VERTEX_ARRAY_BINDING = vertexArrayObjectExtension.VERTEX_ARRAY_BINDING_OES;
+    const vertexArrayObjectExtension = polyFilledGL.getExtension('OES_vertex_array_object');
+    polyFilledGL.createVertexArray = () => vertexArrayObjectExtension.createVertexArrayOES();
+    polyFilledGL.deleteVertexArray = (id) => vertexArrayObjectExtension.deleteVertexArrayOES(id);
+    polyFilledGL.bindVertexArray = (id) => vertexArrayObjectExtension.bindVertexArrayOES(id);
+    polyFilledGL.isVertexArray = (id) => vertexArrayObjectExtension.isVertexArrayOES(id);
+    polyFilledGL.VERTEX_ARRAY_BINDING = vertexArrayObjectExtension.VERTEX_ARRAY_BINDING_OES;
     // Enable instanced drawing
-    const instancedDrawing = gl.getExtension('ANGLE_instanced_arrays');
-    gl.vertexAttribDivisor = (index, divisor) => instancedDrawing.vertexAttribDivisorANGLE(index, divisor);
-    gl.drawElementsInstanced = (mode, count, type, offset, primcount) => instancedDrawing.drawElementsInstancedANGLE(mode, count, type, offset, primcount);
-    gl.drawArraysInstanced = (mode, first, count, primcount) => instancedDrawing.drawArraysInstancedANGLE(mode, first, count, primcount);
+    const instancedDrawing = polyFilledGL.getExtension('ANGLE_instanced_arrays');
+    polyFilledGL.vertexAttribDivisor = (index, divisor) => instancedDrawing.vertexAttribDivisorANGLE(index, divisor);
+    polyFilledGL.drawElementsInstanced = (mode, count, type, offset, primcount) => instancedDrawing.drawElementsInstancedANGLE(mode, count, type, offset, primcount);
+    polyFilledGL.drawArraysInstanced = (mode, first, count, primcount) => instancedDrawing.drawArraysInstancedANGLE(mode, first, count, primcount);
     // Enable unsigned integer support as index
-    gl.getExtension('OES_element_index_uint');
+    polyFilledGL.getExtension('OES_element_index_uint');
     return gl;
 };

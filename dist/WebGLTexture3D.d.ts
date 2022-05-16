@@ -48,4 +48,4 @@ export default class WebGLTexture3D extends WebGLBaseTexture {
      */
     uploadImage(image: CanvasImageSource, height: number, depth: number, x?: number, y?: number, z?: number): void;
 }
-import WebGLBaseTexture from "./WebGLBaseTexture.js";
+import WebGLBaseTexture from "./WebGLBaseTexture";

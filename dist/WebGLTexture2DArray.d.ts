@@ -44,4 +44,4 @@ export default class WebGLTexture2DArray extends WebGLBaseTexture {
      */
     uploadData(data: TypedArray, width: number, height: number, layer: number, x?: number, y?: number): void;
 }
-import WebGLBaseTexture from "./WebGLBaseTexture.js";
+import WebGLBaseTexture from "./WebGLBaseTexture";

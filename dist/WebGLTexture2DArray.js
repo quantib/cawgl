@@ -1,4 +1,4 @@
-import WebGLBaseTexture from './WebGLBaseTexture.js';
+import WebGLBaseTexture from './WebGLBaseTexture';
 /**
  * Private function to specify and allocate the storage needed for the texture array.
  * This allows us to get storage without using a gl.texture3D call

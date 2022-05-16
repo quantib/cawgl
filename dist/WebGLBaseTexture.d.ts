@@ -4,16 +4,11 @@
 export default class WebGLBaseTexture {
     /**
      * Prepares a base texture to be used in child classes.
-     * @param {WebGL2RenderingContext} gl
-     *  Context to create the texture on.
-     * @param {GLenum} target
-     *  The target of the texture, has to be one of TEXTURE_2D, TEXTURE_3D, ...
-     * @param {GLenum} internalFormat
-     *  The internal format of the texture used has to be one of RGBA8, ...
-     * @param {GLenum} format
-     *  The format of the texture, has to be one of RGB, RGBA, ...
-     * @param {GLenum} type
-     *  The type of data stored in the texture has to be one of UNSIGNED_BYTE, ...
+     * @param {WebGL2RenderingContext} gl Context to create the texture on.
+     * @param {GLenum} target The target of the texture, has to be one of TEXTURE_2D, etc.
+     * @param {GLenum} internalFormat The internal format of the texture, has to be one of RGBA8, etc
+     * @param {GLenum} format The format of the texture, has to be one of RGB, etc
+     * @param {GLenum} type The type of data stored in the texture has to be one of UNSIGNED_BYTE, etc
      */
     constructor(gl: WebGL2RenderingContext, target: GLenum, internalFormat: GLenum, format: GLenum, type: GLenum);
     gl: WebGL2RenderingContext;

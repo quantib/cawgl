@@ -7,7 +7,8 @@ export default class WebGLShader {
      * @param {WebGL2RenderingContext} gl The context on which to create the shader.
      * @param {string} vertexShaderCode The vertex shader code.
      * @param {string} fragmentShaderCode The fragment shader code.
-     * @param {Array<{location: number, name: string}>} attributeBindingHints Optional hint for requesting attribute location.
+     * @param {Array<{location: number, name: string}>} attributeBindingHints
+     *  Optional hint for requesting attribute location.
      */
     constructor(gl: WebGL2RenderingContext, vertexShaderCode: string, fragmentShaderCode: string, attributeBindingHints?: Array<{
         location: number;

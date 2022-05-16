@@ -22,7 +22,7 @@ export default class WebGLBuffer {
     /**
      * Allocates space in the WebGL driver for a buffer with the size of
      * the typed array and copies the data to the WebGL buffer.
-     * @param {TypedArray} data the data used to fill the buffer
+     * @param {ArrayBuffer} data the data used to fill the buffer
      */
     bufferData(data) {
         this.bind();
@@ -32,7 +32,7 @@ export default class WebGLBuffer {
     /**
      * Buffers sub data in the previously allocated buffer.
      * @param {number} destinationOffset The offset in the destination buffer; in bytes.
-     * @param {TypedArray} data The data to buffer.
+     * @param {ArrayBuffer} data The data to buffer.
      * @param {number} sourceOffset The offset in the source where the copy starts; in array elements.
      * @param {number} length The length of the data we want to buffer; in array elements.
      */

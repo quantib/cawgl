@@ -77,10 +77,11 @@ const getSetterForType = (gl, type, location) => {
         case gl.SAMPLER_2D_ARRAY:
             return (value, unit = 0) => {
                 gl.uniform1i(location, unit);
-                value === null || value === void 0 ? void 0 : value.bind(unit);
+                if (value.bind)
+                    value.bind(unit);
             };
         default:
-            throw new Error('Unknown uniform type.' + type);
+            throw new Error(`Unknown uniform type.${type}`);
     }
 };
 /**
@@ -124,7 +125,8 @@ export default class WebGLShader {
      * @param {WebGL2RenderingContext} gl The context on which to create the shader.
      * @param {string} vertexShaderCode The vertex shader code.
      * @param {string} fragmentShaderCode The fragment shader code.
-     * @param {Array<{location: number, name: string}>} attributeBindingHints Optional hint for requesting attribute location.
+     * @param {Array<{location: number, name: string}>} attributeBindingHints
+     *  Optional hint for requesting attribute location.
      */
     constructor(gl, vertexShaderCode, fragmentShaderCode, attributeBindingHints = []) {
         this.gl = gl;
@@ -141,12 +143,11 @@ export default class WebGLShader {
      * @throws Error if compilation was unsuccessful.
      */
     compile() {
-        var _a;
         const vertexShader = createAndCompileShader(this.gl, this.vertexShaderCode, this.gl.VERTEX_SHADER);
         const fragmentShader = createAndCompileShader(this.gl, this.fragmentShaderCode, this.gl.FRAGMENT_SHADER);
         this.gl.attachShader(this.program, vertexShader);
         this.gl.attachShader(this.program, fragmentShader);
-        (_a = this.attributeBindingHints) === null || _a === void 0 ? void 0 : _a.forEach((info) => {
+        this.attributeBindingHints.forEach((info) => {
             this.gl.bindAttribLocation(this.program, info.location, info.name);
         });
         this.gl.linkProgram(this.program);

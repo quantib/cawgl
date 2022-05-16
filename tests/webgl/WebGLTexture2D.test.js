@@ -6,6 +6,7 @@ import {
   expect,
   beforeAll,
   it,
+  beforeEach,
 } from '@jest/globals';
 
 // opted for a complexer strategy because of discrepancy between ANGLE/OpenGL implementation
@@ -14,7 +15,8 @@ const getPixels = (gl, texture) => {
   // Read back buffer from the canvas we created our context on.
   const pixels = new Uint8Array(4 * 2 * 2);
   // We create a shader that draws a 2x2 point on the canvas
-  const shader = new WebGLShader(gl,
+  const shader = new WebGLShader(
+    gl,
     `#version 300 es
     void main() {
       gl_Position = vec4(0, 0, 0, 1.0); 
@@ -26,7 +28,8 @@ const getPixels = (gl, texture) => {
       out vec4 color;
       void main() { 
         color = texelFetch(image, ivec2(gl_FragCoord.x, gl_FragCoord.y), 0);
-      }`);
+      }`,
+  );
   // compile and bind the shader so it is ready to draw
   shader.compile();
   shader.bind();
@@ -44,7 +47,6 @@ const getPixels = (gl, texture) => {
 describe('2D texture class', () => {
   let gl;
   let texture;
-
 
   beforeAll(async () => {
     const context = await getWebGL();

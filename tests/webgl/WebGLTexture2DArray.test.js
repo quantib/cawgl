@@ -5,6 +5,8 @@ import {
   describe,
   expect,
   beforeAll,
+  beforeEach,
+  afterEach,
   it,
 } from '@jest/globals';
 
@@ -14,7 +16,8 @@ const getPixels = (gl, texture, layer) => {
   // Read back buffer from the canvas we created our context on.
   const pixels = new Uint8Array(4 * 2 * 2);
   // We create a shader that draws a 2x2 point on the canvas
-  const shader = new WebGLShader(gl,
+  const shader = new WebGLShader(
+    gl,
     `#version 300 es
     void main() {
       gl_Position = vec4(0, 0, 0, 1.0); 
@@ -29,7 +32,8 @@ const getPixels = (gl, texture, layer) => {
       out vec4 color;
       void main() { 
         color = texelFetch(image, ivec3(gl_FragCoord.x, gl_FragCoord.y, layer), 0);
-      }`);
+      }`,
+  );
   // compile and bind the shader so it is ready to draw
   shader.compile();
   shader.bind();

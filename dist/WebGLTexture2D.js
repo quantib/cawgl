@@ -1,4 +1,4 @@
-import WebGLBaseTexture from './WebGLBaseTexture.js';
+import WebGLBaseTexture from './WebGLBaseTexture';
 /**
  * Extension of the base texture; provides abstraction over the 2D based texture calls.
  */

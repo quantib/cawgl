@@ -10,7 +10,7 @@
  * the convenience of some functionality or your platform does not support WebGL2
  * it can be polyfilled using extensions.
  * @param {WebGLRenderingContext} gl The context to polyfill.
- * @returns {*} WebGLRenderingContext with some WebGL2 functionality
+ * @returns {WebGLRenderingContext} WebGLRenderingContext with some WebGL2 functionality
  */
 export default (gl) => {
   const polyFilledGL = gl;
