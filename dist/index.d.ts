@@ -8,3 +8,4 @@ export { default as WebGLTexture3D } from "./WebGLTexture3D";
 export { default as WebGLViewport } from "./WebGLViewport";
 export { default as WebGLVertexLayout } from "./WebGLVertexLayout";
 export { default as WebGLBaseTexture } from "./WebGLBaseTexture";
+export { default as WebGLFBO } from "./WebGLFBO";

@@ -7,6 +7,7 @@ var _createClass = require('@babel/runtime/helpers/createClass');
 var _inherits = require('@babel/runtime/helpers/inherits');
 var _possibleConstructorReturn = require('@babel/runtime/helpers/possibleConstructorReturn');
 var _getPrototypeOf = require('@babel/runtime/helpers/getPrototypeOf');
+var _defineProperty = require('@babel/runtime/helpers/defineProperty');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
@@ -15,6 +16,7 @@ var _createClass__default = /*#__PURE__*/_interopDefaultLegacy(_createClass);
 var _inherits__default = /*#__PURE__*/_interopDefaultLegacy(_inherits);
 var _possibleConstructorReturn__default = /*#__PURE__*/_interopDefaultLegacy(_possibleConstructorReturn);
 var _getPrototypeOf__default = /*#__PURE__*/_interopDefaultLegacy(_getPrototypeOf);
+var _defineProperty__default = /*#__PURE__*/_interopDefaultLegacy(_defineProperty);
 
 /**
  * Polyfills WebGL 2 functionality using extensions.
@@ -1054,9 +1056,127 @@ var WebGLVertexLayout = /*#__PURE__*/function () {
   return WebGLVertexLayout;
 }();
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty__default["default"](target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+
+/**
+ * Initializes the frame buffer object
+ * @param {WebGLRenderingContext} gl
+ * @param {Array<{attachmentPoint: number, texture: WebGLTexture2D}>} attachments
+ * @param {Array<{attachmentPoint: number, format: number}>} renderBuffers
+ * @private
+ */
+var initFBO = function initFBO(gl, attachments, renderBuffers) {
+  var fbo = gl.createFramebuffer();
+  gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+  attachments.forEach(function (object) {
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, object.attachmentPoint, gl.TEXTURE_2D, object.texture.texture, 0);
+  });
+  var renderBufferObjects = renderBuffers.map(function (object) {
+    var renderbuffer = gl.createRenderbuffer();
+    gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuffer);
+    gl.renderbufferStorage(gl.RENDERBUFFER, object.format, 1, 1);
+    gl.framebufferRenderbuffer(gl.FRAMEBUFFER, object.attachmentPoint, gl.RENDERBUFFER, renderbuffer);
+    return _objectSpread({
+      buffer: renderbuffer
+    }, object);
+  });
+  return {
+    fbo: fbo,
+    renderBufferObjects: renderBufferObjects
+  };
+};
+/**
+ * Abstraction over frame buffer object.
+ */
+
+
+var WebGLFbo = /*#__PURE__*/function () {
+  /**
+   * Initializes a webgl frame buffer object.
+   * @param {WebGLRenderingContext} gl The gl context to create the framebuffer for.
+   * @param {number} width The dimension used for the texture.
+   * @param {number} height The dimension used for the texture.
+   * @param {Array<{attachmentPoint: number, texture: WebGLTexture2D}>} attachmentsThe
+   *  list of attachments with points.
+   * @param {Array<{attachmentPoint: number, format: number}>} renderBuffers
+   *  Indicates which attachmentpoints should use a renderbuffer.
+   */
+  function WebGLFbo(gl, width, height, attachments) {
+    var renderBuffers = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : [];
+
+    _classCallCheck__default["default"](this, WebGLFbo);
+
+    this.gl = gl;
+    this.attachments = attachments;
+
+    var _initFBO = initFBO(this.gl, attachments, renderBuffers),
+        fbo = _initFBO.fbo,
+        renderBufferObjects = _initFBO.renderBufferObjects;
+
+    this.fbo = fbo;
+    this.renderbufferObjects = renderBufferObjects;
+    this.gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    this.setSize(width, height);
+  }
+  /**
+   * Sets the size of the frame buffer.
+   * @param {number} width The dimension used for the texture.
+   * @param {number} height The dimension used for the texture.
+   */
+
+
+  _createClass__default["default"](WebGLFbo, [{
+    key: "setSize",
+    value: function setSize(width, height) {
+      var _this = this;
+
+      this.width = width;
+      this.height = height;
+      this.attachments.forEach(function (object) {
+        object.texture.uploadData(width, height, undefined);
+      });
+      this.renderbufferObjects.forEach(function (renderbuffer) {
+        _this.gl.bindRenderbuffer(_this.gl.RENDERBUFFER, renderbuffer.buffer);
+
+        _this.gl.renderbufferStorage(_this.gl.RENDERBUFFER, renderbuffer.format, width, height);
+      });
+    }
+    /**
+     * Starts the render pass to this frame buffer.
+     */
+
+  }, {
+    key: "renderTo",
+    value: function renderTo() {
+      this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.fbo);
+      this.gl.viewport(0, 0, this.width, this.height);
+    }
+    /**
+     * Disposes of any held WebGL resources.
+     * Is not responsible for the attachment array since they were not created by this object.
+     */
+
+  }, {
+    key: "dispose",
+    value: function dispose() {
+      var _this2 = this;
+
+      this.gl.deleteFramebuffer(this.fbo);
+      this.renderbufferObjects.forEach(function (object) {
+        _this2.gl.deleteRenderbuffer(object.buffer);
+      });
+    }
+  }]);
+
+  return WebGLFbo;
+}();
+
 exports.WebGLBaseTexture = WebGLBaseTexture;
 exports.WebGLBuffer = WebGLBuffer;
 exports.WebGLBufferDescriptor = WebGLBufferDescriptor;
+exports.WebGLFBO = WebGLFbo;
 exports.WebGLShader = WebGLShader;
 exports.WebGLTexture2D = WebGLTexture2D;
 exports.WebGLTexture2DArray = WebGLTexture2DArray;

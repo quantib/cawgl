@@ -48,8 +48,8 @@ describe('2D texture class', () => {
   let gl;
   let texture;
 
-  beforeAll(async () => {
-    const context = await getWebGL();
+  beforeAll(() => {
+    const context = getWebGL();
     gl = context.gl;
     context.canvas.width = 2;
     context.canvas.height = 2;
@@ -196,10 +196,10 @@ describe('2D texture class', () => {
         texture.uploadData(2, 2, floatData);
 
         expect(getPixels(gl, texture)).toEqual(new Uint8Array([
-          128, 0, 0, 255,
-          128, 0, 0, 255,
-          128, 0, 0, 255,
-          128, 0, 0, 255,
+          127, 0, 0, 255,
+          127, 0, 0, 255,
+          127, 0, 0, 255,
+          127, 0, 0, 255,
         ]));
       });
     });
@@ -211,19 +211,19 @@ describe('2D texture class', () => {
         texture.uploadData(2, 2, floatData);
         texture.subUploadData(1, 1, redPixelFloat, 1, 1);
         expect(getPixels(gl, texture)).toEqual(new Uint8Array([
-          128, 0, 0, 255,
-          128, 0, 0, 255,
-          128, 0, 0, 255,
+          127, 0, 0, 255,
+          127, 0, 0, 255,
+          127, 0, 0, 255,
           255, 0, 0, 255,
         ]));
 
         texture.uploadData(2, 2, floatData);
         texture.subUploadData(0, 1, redPixelFloat, 1, 1);
         expect(getPixels(gl, texture)).toEqual(new Uint8Array([
-          128, 0, 0, 255,
-          128, 0, 0, 255,
+          127, 0, 0, 255,
+          127, 0, 0, 255,
           255, 0, 0, 255,
-          128, 0, 0, 255,
+          127, 0, 0, 255,
         ]));
       });
     });

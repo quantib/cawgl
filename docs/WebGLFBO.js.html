@@ -31,7 +31,7 @@
 
 
     <title>
-      WebGLTexture3D
+      WebGLFBO.js
     </title>
 
     <!--[if lt IE 9]>
@@ -98,7 +98,7 @@
     <div id="main" class="main-content">
       
       <h1 id='page-title' class="page-title">
-        WebGLTexture3D
+        WebGLFBO.js
       </h1>
       
 
@@ -106,331 +106,110 @@
 
 
 
-
-<section>
-
-
-<header>
     
-        
-        <h2>
-        
-            <span class="ancestors"><a href="WebGLTexture3D.html">WebGLTexture3D</a>#</span>
-        
-        WebGLTexture3D
-        
-        </h2>
-        
-        
-    
-</header>
-
-
-<article>
-    <div class="container-overview">
-    
-        
-
-    
-
-    <h4 class="name" id="WebGLTexture3D">
-        <a href="#WebGLTexture3D">#</a>
-        <span class="type-signature"></span>new WebGLTexture3D<span class="signature">(gl, internalFormat, format, type, width, height, depth)</span><span class="type-signature"></span>
-    </h4>
-
-    
-
-
-
-    <div class="description">
-        Prepares a base texture with 3D texture support.
-    </div>
-
-
-
-
-
-
-
-
-
-    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
-        <strong>Parameters:</strong>
-        
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>gl</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">WebGL2RenderingContext</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The context to create the texture on.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>internalFormat</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">GLenum</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The internal format of the texture used has to be one of RGBA8 ...</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>format</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">GLenum</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The format of the texture, has to be one of RGB, RGBA...</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>type</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">GLenum</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The type of data stored, has to be one of UNSIGNED_BYTE...</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>width</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The width of the 3D texture.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>height</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The height of the 3D texture.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>depth</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The depth of the 3D texture.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <div class="details-item-container">
-            <dt class="tag-source">Source:</dt>
-            <dd class="tag-source"><ul class="dummy"><li>
-                <a href="WebGLTexture3D.js.html">WebGLTexture3D.js</a>, <a href="WebGLTexture3D.js.html#line41">line 41</a>
-            </li></ul></dd>
-        </div>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Initializes the frame buffer object
+ * @param {WebGLRenderingContext} gl
+ * @param {Array&lt;{attachmentPoint: number, texture: WebGLTexture2D}>} attachments
+ * @param {Array&lt;{attachmentPoint: number, format: number}>} renderBuffers
+ * @private
+ */
+const initFBO = (gl, attachments, renderBuffers) => {
+  const fbo = gl.createFramebuffer();
+  gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+  attachments.forEach((object) => {
+    gl.framebufferTexture2D(
+      gl.FRAMEBUFFER,
+      object.attachmentPoint,
+      gl.TEXTURE_2D,
+      object.texture.texture,
+      0,
+    );
+  });
+  const renderBufferObjects = renderBuffers.map((object) => {
+    const renderbuffer = gl.createRenderbuffer();
+    gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuffer);
+    gl.renderbufferStorage(gl.RENDERBUFFER, object.format, 1, 1);
+    gl.framebufferRenderbuffer(
+      gl.FRAMEBUFFER,
+      object.attachmentPoint,
+      gl.RENDERBUFFER,
+      renderbuffer,
+    );
+    return { buffer: renderbuffer, ...object };
+  });
+  return { fbo, renderBufferObjects };
+};
+
+/**
+ * Abstraction over frame buffer object.
+ */
+export default class WebGLFbo {
+  /**
+   * Initializes a webgl frame buffer object.
+   * @param {WebGLRenderingContext} gl The gl context to create the framebuffer for.
+   * @param {number} width The dimension used for the texture.
+   * @param {number} height The dimension used for the texture.
+   * @param {Array&lt;{attachmentPoint: number, texture: WebGLTexture2D}>} attachmentsThe
+   *  list of attachments with points.
+   * @param {Array&lt;{attachmentPoint: number, format: number}>} renderBuffers
+   *  Indicates which attachmentpoints should use a renderbuffer.
+   */
+  constructor(gl, width, height, attachments, renderBuffers = []) {
+    this.gl = gl;
+    this.attachments = attachments;
+    const { fbo, renderBufferObjects } = initFBO(
+      this.gl,
+      attachments,
+      renderBuffers,
+    );
+    this.fbo = fbo;
+    this.renderbufferObjects = renderBufferObjects;
+    this.gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    this.setSize(width, height);
+  }
+
+  /**
+   * Sets the size of the frame buffer.
+   * @param {number} width The dimension used for the texture.
+   * @param {number} height The dimension used for the texture.
+   */
+  setSize(width, height) {
+    this.width = width;
+    this.height = height;
+    this.attachments.forEach((object) => {
+      object.texture.uploadData(width, height, undefined);
+    });
+    this.renderbufferObjects.forEach((renderbuffer) => {
+      this.gl.bindRenderbuffer(this.gl.RENDERBUFFER, renderbuffer.buffer);
+      this.gl.renderbufferStorage(this.gl.RENDERBUFFER, renderbuffer.format, width, height);
+    });
+  }
+
+  /**
+   * Starts the render pass to this frame buffer.
+   */
+  renderTo() {
+    this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.fbo);
+    this.gl.viewport(0, 0, this.width, this.height);
+  }
+
+  /**
+   * Disposes of any held WebGL resources.
+   * Is not responsible for the attachment array since they were not created by this object.
+   */
+  dispose() {
+    this.gl.deleteFramebuffer(this.fbo);
+    this.renderbufferObjects.forEach((object) => {
+      this.gl.deleteRenderbuffer(object.buffer);
+    });
+  }
+}
+</code></pre>
+        </article>
+    </section>
 
 
 

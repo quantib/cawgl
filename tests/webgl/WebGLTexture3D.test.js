@@ -227,17 +227,17 @@ describe('3D texture class', () => {
       ]), 2, 2, 2);
 
       expect(getPixels(gl, texture, 0)).toEqual(new Uint8Array([
-        128, 0, 0, 255,
+        127, 0, 0, 255,
         255, 0, 0, 255,
         0, 0, 0, 255,
-        128, 0, 0, 255,
+        127, 0, 0, 255,
       ]));
 
       expect(getPixels(gl, texture, 1)).toEqual(new Uint8Array([
         255, 0, 0, 255,
         0, 0, 0, 255,
         255, 0, 0, 255,
-        128, 0, 0, 255,
+        127, 0, 0, 255,
       ]));
     });
   });
