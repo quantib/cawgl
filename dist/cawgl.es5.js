@@ -1173,10 +1173,89 @@ var WebGLFbo = /*#__PURE__*/function () {
   return WebGLFbo;
 }();
 
+/**
+ * Abstraction over an index buffer in WebGL
+ */
+var WebGLIndexBuffer = /*#__PURE__*/function () {
+  /**
+     * Creates a Index buffer
+     * @param {WebGL2RenderingContext} gl The context to create an index buffer for.
+     */
+  function WebGLIndexBuffer(gl) {
+    _classCallCheck__default["default"](this, WebGLIndexBuffer);
+
+    this.gl = gl;
+    this.buffer = gl.createBuffer();
+    this.array = [];
+  }
+  /**
+     * Binds the element array buffer to the context
+     */
+
+
+  _createClass__default["default"](WebGLIndexBuffer, [{
+    key: "bind",
+    value: function bind() {
+      this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.buffer);
+    }
+    /**
+       * Sets the buffer
+       * @param {Uint16Array} buffer The data for the buffer
+       */
+
+  }, {
+    key: "setBuffer",
+    value: function setBuffer(buffer) {
+      this.bind();
+      this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, buffer, this.gl.STATIC_DRAW);
+      this.array = buffer;
+    }
+    /**
+       * Draws with the content of the element buffer
+       * @param {GLEnum} mode The mode to render
+       * @param {number} offset The offset in the index buffer to draw
+       * @param {number} count The amount to draw from the index buffer
+       */
+
+  }, {
+    key: "draw",
+    value: function draw(mode, offset, count) {
+      this.bind();
+      this.gl.drawElements(mode, count, this.gl.UNSIGNED_SHORT, offset * this.array.BYTES_PER_ELEMENT);
+    }
+    /**
+       * Draws the contents of the element buffer using instancing.
+       * @param {GLEnum} mode The mode to render
+       * @param {number} offset The offset into the index buffer
+       * @param {number} count The amount of vertices to draw
+       * @param {number} instances The amount of instanced to draw
+       */
+
+  }, {
+    key: "drawInstanced",
+    value: function drawInstanced(mode, offset, count, instances) {
+      this.bind();
+      this.gl.drawElementsInstanced(mode, count, this.gl.UNSIGNED_SHORT, offset * this.array.BYTES_PER_ELEMENT, instances);
+    }
+    /**
+       * Deletes the buffer from the WebGL context.
+       */
+
+  }, {
+    key: "dispose",
+    value: function dispose() {
+      this.gl.deleteBuffer(this.buffer);
+    }
+  }]);
+
+  return WebGLIndexBuffer;
+}();
+
 exports.WebGLBaseTexture = WebGLBaseTexture;
 exports.WebGLBuffer = WebGLBuffer;
 exports.WebGLBufferDescriptor = WebGLBufferDescriptor;
 exports.WebGLFBO = WebGLFbo;
+exports.WebGLIndexBuffer = WebGLIndexBuffer;
 exports.WebGLShader = WebGLShader;
 exports.WebGLTexture2D = WebGLTexture2D;
 exports.WebGLTexture2DArray = WebGLTexture2DArray;
