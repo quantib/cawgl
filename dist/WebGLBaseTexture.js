@@ -61,7 +61,8 @@ export default class WebGLBaseTexture {
     setWrap(wrap) {
         this.gl.texParameteri(this.target, this.gl.TEXTURE_WRAP_S, wrap);
         this.gl.texParameteri(this.target, this.gl.TEXTURE_WRAP_T, wrap);
-        this.gl.texParameteri(this.target, this.gl.TEXTURE_WRAP_R, wrap);
+        if (this.gl.TEXTURE_WRAP_R)
+            this.gl.texParameteri(this.target, this.gl.TEXTURE_WRAP_R, wrap);
     }
     /**
      * Deletes the texture from the WebGL context

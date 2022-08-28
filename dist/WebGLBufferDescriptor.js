@@ -1,3 +1,8 @@
+const BYTE = 5120;
+const UNSIGNED_BYTE = 5121;
+const SHORT = 5122;
+const UNSIGNED_SHORT = 5123;
+const FLOAT = 5126;
 /**
  * Private function to find the size in bytes for the given supported type.
  * @param {GLenum} type The type to find the amount of bytes for.
@@ -6,18 +11,13 @@
  */
 const getSizeForGLType = (type) => {
     switch (type) {
-        // BYTE
-        // UNSIGNED_BYTE
-        case WebGL2RenderingContext.BYTE:
-        case WebGL2RenderingContext.UNSIGNED_BYTE:
+        case BYTE:
+        case UNSIGNED_BYTE:
             return 1;
-        // SHORT
-        // UNSIGNED_SHORT
-        case WebGL2RenderingContext.SHORT:
-        case WebGL2RenderingContext.UNSIGNED_SHORT:
+        case SHORT:
+        case UNSIGNED_SHORT:
             return 2;
-        // FLOAT
-        case WebGL2RenderingContext.FLOAT:
+        case FLOAT:
             return 4;
         default:
             return 0.1;

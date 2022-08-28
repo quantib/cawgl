@@ -425,7 +425,7 @@ var WebGLBaseTexture = /*#__PURE__*/function () {
     value: function setWrap(wrap) {
       this.gl.texParameteri(this.target, this.gl.TEXTURE_WRAP_S, wrap);
       this.gl.texParameteri(this.target, this.gl.TEXTURE_WRAP_T, wrap);
-      this.gl.texParameteri(this.target, this.gl.TEXTURE_WRAP_R, wrap);
+      if (this.gl.TEXTURE_WRAP_R) this.gl.texParameteri(this.target, this.gl.TEXTURE_WRAP_R, wrap);
     }
     /**
      * Deletes the texture from the WebGL context
@@ -620,28 +620,29 @@ var WebGLBuffer = /*#__PURE__*/function () {
   return WebGLBuffer;
 }();
 
+var BYTE = 5120;
+var UNSIGNED_BYTE = 5121;
+var SHORT = 5122;
+var UNSIGNED_SHORT = 5123;
+var FLOAT = 5126;
 /**
  * Private function to find the size in bytes for the given supported type.
  * @param {GLenum} type The type to find the amount of bytes for.
  * @returns {number} Size in bytes.
  * @private
  */
+
 var getSizeForGLType = function getSizeForGLType(type) {
   switch (type) {
-    // BYTE
-    // UNSIGNED_BYTE
-    case WebGL2RenderingContext.BYTE:
-    case WebGL2RenderingContext.UNSIGNED_BYTE:
+    case BYTE:
+    case UNSIGNED_BYTE:
       return 1;
-    // SHORT
-    // UNSIGNED_SHORT
 
-    case WebGL2RenderingContext.SHORT:
-    case WebGL2RenderingContext.UNSIGNED_SHORT:
+    case SHORT:
+    case UNSIGNED_SHORT:
       return 2;
-    // FLOAT
 
-    case WebGL2RenderingContext.FLOAT:
+    case FLOAT:
       return 4;
 
     default:
@@ -1071,6 +1072,7 @@ var initFBO = function initFBO(gl, attachments, renderBuffers) {
   var fbo = gl.createFramebuffer();
   gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
   attachments.forEach(function (object) {
+    object.texture.bind();
     gl.framebufferTexture2D(gl.FRAMEBUFFER, object.attachmentPoint, gl.TEXTURE_2D, object.texture.texture, 0);
   });
   var renderBufferObjects = renderBuffers.map(function (object) {
