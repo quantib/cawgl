@@ -9,6 +9,7 @@ const initFBO = (gl, attachments, renderBuffers) => {
   const fbo = gl.createFramebuffer();
   gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
   attachments.forEach((object) => {
+    object.texture.bind();
     gl.framebufferTexture2D(
       gl.FRAMEBUFFER,
       object.attachmentPoint,
